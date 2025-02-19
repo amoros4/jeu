@@ -1,35 +1,39 @@
- 
- const touches = [...document.querySelectorAll(".button")];
- const listeKeycode = touches.map(touche => touche.dataset.key);
- const ecran = document.querySelector('.ecran');
+let button = document.getElementById("button")
+let form = document.getElementById("form")
+let message = document.getElementById("message")
+let link = document.getElementById("link")
 
-document.addEventListener('keydown', (e) => {
-     const valeur = e.keyCode.toString();
-    calculer(valeur);
- })
- document.addEventListener('click', (e)=>{
-     const valeur = e.target.dataset.key;
-    calculer(valeur);
- })
- const calculer = (valeur) =>{
-     if(listeKeycode.includes(valeur)){
-         switch (valeur){
-            case '8':
-                ecran.textContent = "";
-                 break;
-                case '13':
-                     const calcul = eval(ecran.textContent);
-                     ecran.textContent = calcul;
-                     break;
-                     default:
-                         const indexKeycode =listeKeycode.indexOf(valeur);
-                         const touche = touches[indexKeycode];
-                         ecran.textContent += touche.innerHTML;
-         }
-        
-     }
- }
+const secretNunber = Math.floor(Math.random() * 100);
+let attemps = 10;
 
- window.addEventListener('error', (e)=>{
-    alert("une erreur est survenue dans votre calcul : " + e.message);
-});
+button.onclick = function(){
+    const input = document.getElementById("input");
+    if (input.value != "") {
+
+        if(input.value < secretNunber){
+            message.innerText = 'le nombre est plus grand que ' + input.value + '!';
+            message.style.color = "#999";
+        }else if (input.value > secretNunber){
+            message.innerText = 'le nombre est plus petit que ' + input.value + '!';
+            message.style.color = "#999";
+        }
+
+        if(attemps == 0){
+            message.innerText = 'Vous avez perdu, il fallait trouvé ' + secretNunber + '!';
+            message.style.color = "red";
+            form.style.display = 'none';
+            link.style.display = 'flex';
+        }
+        attemps--;
+
+        if(input.value == secretNunber){
+            message.innerText = 'Bravo, vous avez trouvé le nombre qui est ' + secretNunber + '!';
+            message.style.color = "green";
+            form.style.display = 'none';
+            link.style.display = 'flex';
+        }
+    } else {
+        message.innerText = "le champ est vide !";
+        message.style.color = "red";
+    }
+}
